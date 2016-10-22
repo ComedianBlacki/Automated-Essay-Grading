@@ -4,6 +4,7 @@
 *.sh
 *.aux
 *.gz
+.ipynb_checkpoints
 
 # Compiled source #
 ###################
