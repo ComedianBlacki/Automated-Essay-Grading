@@ -15,7 +15,6 @@ from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import cohen_kappa_score
 from nltk.corpus import wordnet
-%matplotlib inline
 
 ################################################################
 #######################  FROM MILESTONE 4 ######################  
@@ -134,6 +133,7 @@ xs = [[x] for x in np.array(train_df['sentence_length'])]
 logistic_l2.fit(xs, train_std_scores)
 
 # DENORMALIZING FOR THE VALID SET
+max_essay_set = max(train_df['essay_set'])
 stand_pred_values_l2 = []
 for i in range(max_essay_set):
     current_set = valid_df[valid_df['essay_set'] == i + 1]['sentence_length']
