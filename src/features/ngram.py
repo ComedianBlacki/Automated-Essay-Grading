@@ -6,6 +6,7 @@ import numpy as np
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression as LogReg
+from sklearn.linear_model import LinearRegression as LinReg
 from sklearn.linear_model import LogisticRegressionCV as LogRegCV
 from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
@@ -141,7 +142,7 @@ train_vectors = vectorizer.fit_transform(train_essays).toarray()
 
 
 #normalizing for y
-train_std_scores = np.asarray(vectorizer_train['std_score'], dtype="|S6")
+train_std_scores = np.asarray(vectorizer_train['std_score'], dtype="|S6").astype(np.float)
 print train_std_scores[:5]
 
 ######################################
@@ -154,7 +155,7 @@ print train_std_scores[:5]
 ###############
 
 # Logistic Model with L2 penalty
-logistic_l2 = LogReg(penalty='l2', solver='liblinear', n_jobs=4)
+logistic_l2 = LinReg(n_jobs=4)
 logistic_l2.fit(train_vectors, train_std_scores)
 
 valid_vectors = vectorizer.transform(vectorizer_valid['essay'].values).toarray()
@@ -176,30 +177,30 @@ for i in range(max_essay_set):
 #adding the denormalizede predicted values to the valid_df dataset
 valid_df['newly_predicted_scores_log_l2'] = stand_pred_values_l2
 
-###############
-# Logistic L1 #
-###############
+# ###############
+# # Logistic L1 #
+# ###############
 
-# Logistic Model with L1 penalty
-logistic_l1 = LogReg(penalty='l1', solver='liblinear', n_jobs=4)
-logistic_l1.fit(train_vectors, train_std_scores)
+# # Logistic Model with L1 penalty
+# logistic_l1 = LinReg(penalty='l1', solver='liblinear', n_jobs=4)
+# logistic_l1.fit(train_vectors, train_std_scores)
 
-valid_pred_std_scores_l1 = logistic_l1.predict(valid_vectors)
+# valid_pred_std_scores_l1 = logistic_l1.predict(valid_vectors)
 
 
-# Appending predicted scores to validation data set
-valid_df['Log_L1 predicted_scores'] = valid_pred_std_scores_l1
+# # Appending predicted scores to validation data set
+# valid_df['Log_L1 predicted_scores'] = valid_pred_std_scores_l1
 
-#denormalizing the values and placing them into the stand_pred_values array
-stand_pred_values_l1 = []
-for i in range(max_essay_set):
-    current_set = valid_df[valid_df['essay_set'] == i + 1]['Log_L1 predicted_scores']
-    for value in current_set:
-        stand_pred_values_l1.append(int(float(value) * float(regularization_data[i][2]) + (regularization_data[i][1])))
-# print stand_pred_values_l1
+# #denormalizing the values and placing them into the stand_pred_values array
+# stand_pred_values_l1 = []
+# for i in range(max_essay_set):
+#     current_set = valid_df[valid_df['essay_set'] == i + 1]['Log_L1 predicted_scores']
+#     for value in current_set:
+#         stand_pred_values_l1.append(int(float(value) * float(regularization_data[i][2]) + (regularization_data[i][1])))
+# # print stand_pred_values_l1
 
-#adding the denormalizede predicted values to the valid_df dataset
-valid_df['newly_predicted_scores_log_l1'] = stand_pred_values_l1
+# #adding the denormalizede predicted values to the valid_df dataset
+# valid_df['newly_predicted_scores_log_l1'] = stand_pred_values_l1
 
 ###############
 #   Scoring   #
@@ -207,26 +208,26 @@ valid_df['newly_predicted_scores_log_l1'] = stand_pred_values_l1
 
 #Scoring the predicted values with the actual values
 log_l2_count = 0
-log_l1_count = 0
+# log_l1_count = 0
 for i in range(len(valid_df)):
     if valid_df.iloc[i]['score'] == valid_df.iloc[i]['newly_predicted_scores_log_l2']:
         log_l2_count += 1
-    if valid_df.iloc[i]['score'] == valid_df.iloc[i]['newly_predicted_scores_log_l1']:
-        log_l1_count += 1
+    # if valid_df.iloc[i]['score'] == valid_df.iloc[i]['newly_predicted_scores_log_l1']:
+    #     log_l1_count += 1
         
 print "LOGISTIC L2"
 print "Number of correct predictions =", log_l2_count
 print "Total number of observations =", len(valid_df)
 print "Score =", float(log_l2_count) / len(valid_df)
 
-print ""
-print "LOGISTIC L1"
-print "Number of correct predictions =", log_l1_count
-print "Total number of observations =", len(valid_df)
-print "Score =", float(log_l1_count) / len(valid_df)
+# print ""
+# print "LOGISTIC L1"
+# print "Number of correct predictions =", log_l1_count
+# print "Total number of observations =", len(valid_df)
+# print "Score =", float(log_l1_count) / len(valid_df)
 
 #Spearman Correlation Coefficient
 from scipy.stats import spearmanr as Spearman
 
 print "Logistic L2:", Spearman(a = valid_df["score"], b = valid_df["newly_predicted_scores_log_l2"])
-print "Logistic L1:", Spearman(a = valid_df["score"], b = valid_df["newly_predicted_scores_log_l1"])
+# print "Logistic L1:", Spearman(a = valid_df["score"], b = valid_df["newly_predicted_scores_log_l1"])
