@@ -2,6 +2,9 @@ import util
 
 from features.pos_tags import *
 
+from features.spelling import *
+from features.sentences import *
+
 import pandas as pd
 import numpy as np
 
@@ -15,7 +18,17 @@ def main():
 
 	valid_df = util.get_validation_data('../data/valid_set.tsv')
 
-	train_df, valid_df = fill_pos_columns(train_df, valid_df)
+	#train_df, valid_df = fill_pos_columns(train_df, valid_df)
+
+	train_df, valid_df = fill_sentence_colum(train_df, valid_df)
+
+	# want cleaned up data
+	vectorizer_train = util.vectorizer_clean(train_df)
+	train_essays = vectorizer_train['essay'].values
+
+	vectorizer_valid = util.vectorizer_clean(valid_df)
+	valid_essays = vectorizer_valid['essay'].values
+	train_df, valid_df = fill_spelling_column(train_df, valid_df, train_essays, valid_essays)
 
 	# Should go after all features are filled in
 	train_df = util.move_column_last(train_df, 'score')
