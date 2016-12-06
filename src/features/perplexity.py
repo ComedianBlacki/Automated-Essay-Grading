@@ -28,6 +28,7 @@ def fill_perplexity_column(train_df, valid_df):
 	valid_df['perplexity'] = valid_clean['perplexity']
 	return train_df, valid_df
 
+# apply LaPlace smoothing incrementing all counts by 1
 class LaPlaceCounter(dict):
 	def __getitem__(self, idx):
 		if idx in self.keys():
