@@ -67,12 +67,13 @@ def perplexity(counts, test_essay):
 	first = None
 	if len(tri_grams) > 0:
 		first = tri_grams[0]
-	elif len(find_ngrams(word_list, 2)) > 0:
-		bi_grams = find_ngrams(word_list, 2)
-		first = bi_grams[0]
 	else:
-		uni_grams = find_ngrams(word_list, 1)
-		first = uni_grams[0]
+		bi_grams = find_ngrams(word_list, 2)
+		if len(bi_grams) > 0:
+			first = bi_grams[0]
+		else:
+			uni_grams = find_ngrams(word_list, 1)
+			first = uni_grams[0]
 
 	# handle edge case, where probability calc involves fewer than 3 words
 	if len(first) > 1:
@@ -81,7 +82,7 @@ def perplexity(counts, test_essay):
 	else:
 		log_prob += math.log(float(counts[first]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
 		
-	return math.pow(2, -log_prob / len(word_list))
+	return math.pow(2.0, -log_prob / len(word_list))
 
 def main():
 	train_essays = [
