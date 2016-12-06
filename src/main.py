@@ -32,15 +32,12 @@ def main():
 
 	print train_df.head()
 
-
-	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')
-	
+	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')	
 
 	print "Calculating number of sentences feature..."
 
 	train_df, valid_df = fill_sentence_column(train_df, valid_df)
 	
-    '''
 	print "Cleaning for spelling and word count..."
 	# cleaned up data for spelling feature
 	vectorizer_train_spelling = util.vectorizer_clean_spelling(train_df)
@@ -59,7 +56,7 @@ def main():
 	print "Calculating spelling feature..."
 	# spelling feature
 	train_df, valid_df = fill_spelling_column(train_df, valid_df, train_essays_spelling, valid_essays_spelling)
-	'''
+	
 	print "Cleaning for TFIDF..."
 	# cleaned up data for tfidf vector feature
 	vectorizer_train = util.vectorizer_clean(train_df)
@@ -81,7 +78,7 @@ def main():
 	# tfidf vector feature with unigram
 	train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 3)
 
-	'''
+	
 	print "Calculating pos tags feature..."
 
 	train_df, valid_df = fill_pos_columns(train_df, valid_df)
@@ -90,7 +87,7 @@ def main():
 	print "Calculating perplexity feature..."
 
 	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
-    '''
+    
 	print "Moving scores to right end of dataframe"
 
 	# Should go after all features are filled in
