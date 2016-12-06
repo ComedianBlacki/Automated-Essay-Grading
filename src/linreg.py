@@ -24,10 +24,17 @@ valid_df = pd.read_pickle('valid_df.txt')
 
 
 max_essay_set = max(train_df['essay_set'])
+
+COLS = ['std_sentence_count', 'spelling_correct', 'std_unique_words', 'std_total_words', 
+		'ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X', 'std_perplexity', 'std_score']
+
+train_df = train_df[COLS].join(train_df.filter(regex=("tfidf_*")))
+valid_df = valid_df[COLS].join(valid_df.filter(regex=("tfidf_*")))
+
 for i in range(1, max_essay_set+1):
+
 	#vectorizer_train = util.vectorizer_clean(train_df)
-	train_x = np.asarray((train_df[train_df['essay_set'] == i])[['std_sentence_count', 'spelling_correct', \
-		'ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X', 'std_perplexity']])
+	train_x = np.asarray((train_df[train_df['essay_set'] == i]).drop('std_score', axis=1))
 	#train_x = np.asarray((train_df[train_df['essay_set'] == i])[['std_sentence_count']])
 	train_std_scores = np.asarray((train_df[train_df['essay_set'] == i])['std_score'], dtype="|S6").astype(np.float)
 	
@@ -35,8 +42,7 @@ for i in range(1, max_essay_set+1):
 	regr = LinReg(fit_intercept=False, copy_X=False)
 	regr.fit(train_x, train_std_scores)
 
-	valid_x = np.asarray((valid_df[valid_df['essay_set'] == i])[['std_sentence_count', 'spelling_correct', \
-		'ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X', 'perplexity']])
+	valid_x = np.asarray((valid_df[valid_df['essay_set'] == i]).drop('std_score', axis=1))
 	#valid_x = np.asarray((valid_df[valid_df['essay_set'] == i])[['std_sentence_count']])
 	valid_pred_std_scores = regr.predict(valid_x)
 
