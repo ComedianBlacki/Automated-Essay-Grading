@@ -32,10 +32,15 @@ def fill_pos_columns(train_df, valid_df):
 
 	dfs = [train_df, valid_df]
 
-	for df in dfs:
+	for j, df in enumerate(dfs):
 		for i in xrange(df.shape[0]):
 			if i % 1000 == 0:
-				print "Essay " + str(i) + " of " + str(df.shape[0])
+				essay_set = None
+				if j == 0:
+					essay_set = "Train"
+				else:
+					essay_set = "Validation"
+				print essay_set + " essay " + str(i) + " of " + str(df.shape[0])
 			essay = df.get_value(i, 'essay').decode('utf-8',errors='ignore')
 			tags = create_tags_dict(essay)
 
