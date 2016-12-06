@@ -3,7 +3,7 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 import util
 
-UNIV_TAGS = set(['ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X'])
+UNIV_TAGS = ['ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X']
 
 # essay should NOT be cleaned
 # returns proportion of each part of speech in essay
@@ -20,17 +20,12 @@ def create_tags_dict(essay):
 	return tags_dict
 
 def fill_pos_columns(train_df, valid_df):
-
-	# Add parts of speech columns
-	train_df = util.append_zeros_column(train_df, 'noun')
-	train_df = util.append_zeros_column(train_df, 'verb')
-	train_df = util.append_zeros_column(train_df, 'adj')
-
-	valid_df = util.append_zeros_column(valid_df, 'noun')
-	valid_df = util.append_zeros_column(valid_df, 'verb')
-	valid_df = util.append_zeros_column(valid_df, 'adj')
-
 	dfs = [train_df, valid_df]
+
+	for df in dfs:
+		for pos in UNIV_TAGS:
+			# Add parts of speech columns
+			df = util.append_zeros_column(df, pos)
 
 	for j, df in enumerate(dfs):
 		for i in xrange(df.shape[0]):
@@ -46,8 +41,7 @@ def fill_pos_columns(train_df, valid_df):
 
 			#print tags
 
-			df = df.set_value(i, 'noun', tags['NOUN'])
-			df = df.set_value(i, 'verb', tags['VERB'])
-			df = df.set_value(i, 'adj', tags['ADJ'])
+			for pos in UNIV_TAGS:
+				df = df.set_value(i, pos, tags[pos])
 
 	return dfs[0], dfs[1]

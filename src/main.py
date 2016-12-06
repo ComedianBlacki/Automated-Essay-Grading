@@ -57,7 +57,7 @@ def main():
 
 	print "Calculating perplexity feature..."
 
-	train_df, valid_df = fill_perplexity_column(train_df, valid_df)
+	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
 
 	print "Moving scores to right end of dataframe"
 

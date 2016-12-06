@@ -1,7 +1,7 @@
 import math
 import util
 
-def fill_perplexity_column(train_df, valid_df):
+def fill_perplexity_columns(train_df, valid_df):
 	train_clean = vectorizer_clean(train_df)
 	valid_clean = vectorizer_clean(valid_df)
 
