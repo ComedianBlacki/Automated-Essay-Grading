@@ -64,7 +64,7 @@ def perplexity(counts, test_essay):
 		log_prob += math.log(float(counts[tri_gram]) / counts[(tri_gram[0], tri_gram[1])])
 
 	# handle when essays are shorter than 3 words
-	last = None
+	first = None
 	if len(tri_grams) > 0:
 		first = tri_grams[0]
 	elif len(find_ngrams(word_list, 2)) > 0:
@@ -79,7 +79,7 @@ def perplexity(counts, test_essay):
 		log_prob += math.log(float(counts[(first[0], first[1])]) / counts[first[0]])
 		log_prob += math.log(float(counts[first[0]]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
 	else:
-		log_prob += math.log(float(counts[last]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
+		log_prob += math.log(float(counts[first]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
 		
 	return math.pow(2, -log_prob / len(word_list))
 
