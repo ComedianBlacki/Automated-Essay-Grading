@@ -18,7 +18,7 @@ def fill_spelling_column(train_df, valid_df, train_essays, valid_essays):
 
 	spelling_feature_x = []
 	for i, train in enumerate(train_essays):
-		if i % 1000 == 0:
+		if i % 20 == 0:
 			print "Train essay " + str(i) + " of " + str(train_essays.shape[0])
 		sentence = train.split()
 		percent = proportion_correct_spelling(sentence)
@@ -26,7 +26,7 @@ def fill_spelling_column(train_df, valid_df, train_essays, valid_essays):
 
 	valid_spelling_x = []
 	for i, valid in enumerate(valid_essays):
-		if i % 1000 == 0:
+		if i % 20 == 0:
 			print "Valid essay " + str(i) + " of " + str(valid_essays.shape[0])
 		sentence = valid.split()
 		percent = proportion_correct_spelling(sentence)
