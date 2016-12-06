@@ -1,5 +1,9 @@
 import math
 import util
+from nltk import trigrams
+from nltk import bigrams
+from nltk import everygrams
+from collections import Counter
 
 def fill_perplexity_columns(train_df, valid_df):
 	train_clean = util.vectorizer_clean(train_df)
@@ -32,28 +36,23 @@ def fill_perplexity_columns(train_df, valid_df):
 	return util.append_standardized_column(train_df, valid_df, 'perplexity')
 
 # apply LaPlace smoothing, incrementing all counts by 1
-class LaPlaceCounter(dict):
+class LaPlaceCounter(Counter):
 	def __getitem__(self, idx):
 		if idx in self.keys():
 			return dict.__getitem__(self, idx)
 		else:
 			return 1
 
-# with thanks and credit to Scott Triglia
-# http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/
-def find_ngrams(input_list, n):
-  return zip(*[input_list[i:] for i in range(n)])
-
-# train_essays must
+# train_essays must be cleaned before being passed in
 def create_counts(train_essays):
-	n_gram_counts = LaPlaceCounter()
-	for essay in train_essays:
+	unigram_counts = LaPlaceCounter()
+	for i, essay in enumerate(train_essays):
+		if i % 1000 == 0:
+			print "Essay " + str(i) + " of " + str(len(train_essays))
 		word_list = essay.split()
-		for i in xrange(1, 4):
-			ngrams = find_ngrams(word_list, i)
-			for ngram in ngrams:
-				n_gram_counts[ngram] += 1
-	return n_gram_counts
+		for word in word_list:
+			unigram_counts[word] += 1
+	return unigram_counts
 
 # After having already fit model on a set of training essays, calculates the
 # perplexity of a student's essay based from the model, and returns this
@@ -61,30 +60,9 @@ def create_counts(train_essays):
 def perplexity(counts, test_essay):
 	log_prob = 0.0
 	word_list = test_essay.split()
-	tri_grams = find_ngrams(word_list, 3)
-	for tri_gram in tri_grams:
-		# p(w_3 | w_2, w_1) = p(w_3, w_2, w_1) / p(w_2, w_1)
-		log_prob += math.log(float(counts[tri_gram]) / counts[(tri_gram[0], tri_gram[1])])
-
-	# handle when essays are shorter than 3 words
-	first = None
-	if len(tri_grams) > 0:
-		first = tri_grams[0]
-	else:
-		bi_grams = find_ngrams(word_list, 2)
-		if len(bi_grams) > 0:
-			first = bi_grams[0]
-		else:
-			uni_grams = find_ngrams(word_list, 1)
-			first = uni_grams[0]
-
-	# handle edge case, where probability calc involves fewer than 3 words
-	if len(first) > 1:
-		log_prob += math.log(float(counts[(first[0], first[1])]) / counts[first[0]])
-		log_prob += math.log(float(counts[first[0]]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
-	else:
-		log_prob += math.log(float(counts[first]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
-		
+	num_words = sum(counts.values())
+	for word in word_list:
+		log_prob += math.log(float(counts[word]) / num_words)
 	return math.pow(2.0, -log_prob / len(word_list))
 
 def main():
