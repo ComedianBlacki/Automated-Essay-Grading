@@ -1,3 +1,5 @@
+import util
+
 #####################################################
 #COUNTING THE NUMBER OF TOTAL WORDS#
 #####################################################
@@ -8,12 +10,12 @@ def fill_total_words_column(train_df, valid_df, train_essays, valid_essays):
     total_number_valid = []
 
     for i in range(len(train_essays)):
-        splits = train_essays.iloc[i]["essay"].split()
+        splits = train_essays[i].split()
         total_words = len(splits)
         total_number_train.append(total_words)
 
     for i in range(len(valid_essays)):
-        splits = valid_essays.iloc[i]["essay"].split()
+        splits = valid_essays[i].split()
         total_words = len(splits)
         total_number_valid.append(total_words)
 
