@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import re
+import string
 
 # Useful functions go here
 
@@ -102,4 +103,15 @@ def vectorizer_clean(old_df):
     new_df = old_df.copy()
     for i in xrange(new_df.shape[0]):
         new_df.set_value(i, 'essay', " ".join(re.sub('[^a-zA-Z\d\s]', '', new_df['essay'].iloc[i]).lower().split())) 
+    return new_df
+
+# clean vectorizer for spelling feature
+def vectorizer_clean_spelling(old_df):
+    new_df = old_df.copy()
+    for i in xrange(new_df.shape[0]):
+    	regex = re.compile('[%s]' % re.escape(string.punctuation))
+    	out = regex.sub(' ', new_df['essay'].iloc[i])
+    	new_df.set_value(i, 'essay', out)
+
+        #new_df.set_value(i, 'essay', " ".join(re.sub('[^a-zA-Z\d\s]', '', new_df['essay'].iloc[i]).lower().split())) 
     return new_df
