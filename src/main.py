@@ -27,10 +27,11 @@ def main():
 
 	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')
 	
+
 	print "Calculating number of sentences feature..."
 
 	train_df, valid_df = fill_sentence_column(train_df, valid_df)
-
+	'''
 	print "Cleaning for spelling and word count..."
 	# cleaned up data for spelling feature
 	vectorizer_train_spelling = util.vectorizer_clean_spelling(train_df)
@@ -40,11 +41,11 @@ def main():
     
     print "Calculating total words feature..."
     
-    train_df, valid_df = fill_total_words_column(train_df, valid_df)
+    train_df, valid_df = fill_total_words_column(train_df, valid_df, train_essays_spelling, valid_essays_spelling)
     
     print "Calculating unique words feature..."
     
-    train_df, valid_df = fill_unique_words_column(train_df, valid_df)
+    train_df, valid_df = fill_unique_words_column(train_df, valid_df, train_essays_spelling, valid_essays_spelling)
 
 	print "Calculating spelling feature..."
 	# spelling feature
