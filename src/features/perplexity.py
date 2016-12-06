@@ -28,7 +28,7 @@ def fill_perplexity_column(train_df, valid_df):
 	valid_df['perplexity'] = valid_clean['perplexity']
 	return train_df, valid_df
 
-# apply LaPlace smoothing incrementing all counts by 1
+# apply LaPlace smoothing, incrementing all counts by 1
 class LaPlaceCounter(dict):
 	def __getitem__(self, idx):
 		if idx in self.keys():
@@ -81,7 +81,7 @@ def perplexity(counts, test_essay):
 	else:
 		log_prob += math.log(float(counts[last]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
 		
-	return math.exp(-log_prob / len(test_essay))
+	return math.pow(2, -log_prob / len(word_list))
 
 def main():
 	train_essays = [
@@ -93,11 +93,12 @@ def main():
 	"hi my name is kevin",
 	]
 
-	test_essay = "what is your favorite color"
+	test_essay = "what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color what is your favorite color "
 	test_essay2 = "my name is annie kevin"
 	test_essay3 = "hi my name is kevin"
 	test_essay4 = "blah blah blah blah blah"
 	test_essay5 = "hi"
+	test_essay6 = "hi my name is"
 
 	counts = create_counts(train_essays)
 
@@ -106,5 +107,6 @@ def main():
 	print perplexity(counts, test_essay3)
 	print perplexity(counts, test_essay4)
 	print perplexity(counts, test_essay5)
+	print perplexity(counts, test_essay6)
 
 if __name__ == "__main__": main()
