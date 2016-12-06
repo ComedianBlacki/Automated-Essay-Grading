@@ -2,8 +2,8 @@ import math
 import util
 
 def fill_perplexity_column(train_df, valid_df):
-	train_clean = util.vectorizer_clean(train_df)
-	valid_clean = util.vectorizer_clean(valid_df)
+	train_clean = vectorizer_clean(train_df)
+	valid_clean = vectorizer_clean(valid_df)
 
 	counts = create_counts(train_clean['essay'].values)
 
@@ -30,9 +30,13 @@ def fill_perplexity_column(train_df, valid_df):
 
 class LaPlaceCounter(dict):
 	def __getitem__(self, idx):
-		self.setdefault(idx, 1)
-		return dict.__getitem__(self, idx)
+		if idx in self.keys():
+			return dict.__getitem__(self, idx)
+		else:
+			return 1
 
+# with thanks and credit to Scott Triglia
+# http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/
 def find_ngrams(input_list, n):
   return zip(*[input_list[i:] for i in range(n)])
 
@@ -41,7 +45,7 @@ def create_counts(train_essays):
 	n_gram_counts = LaPlaceCounter()
 	for essay in train_essays:
 		word_list = essay.split()
-		for i in xrange(3):
+		for i in xrange(1, 4):
 			ngrams = find_ngrams(word_list, i)
 			for ngram in ngrams:
 				n_gram_counts[ngram] += 1
@@ -55,24 +59,26 @@ def perplexity(counts, test_essay):
 	word_list = test_essay.split()
 	tri_grams = find_ngrams(word_list, 3)
 	for tri_gram in tri_grams:
+		# p(w_3 | w_2, w_1) = p(w_3, w_2, w_1) / p(w_2, w_1)
 		log_prob += math.log(float(counts[tri_gram]) / counts[(tri_gram[0], tri_gram[1])])
 
 	# handle when essays are shorter than 3 words
 	last = None
 	if len(tri_grams) > 0:
-		last = tri_grams[len(tri_grams) - 1]
+		first = tri_grams[0]
 	elif len(find_ngrams(word_list, 2)) > 0:
 		bi_grams = find_ngrams(word_list, 2)
-		last = bi_grams[len(bi_grams) - 1]
+		first = bi_grams[0]
 	else:
 		uni_grams = find_ngrams(word_list, 1)
-		last = uni_grams[len(uni_grams) - 1]
+		first = uni_grams[0]
 
-	if len(last) > 1:
-		log_prob += math.log(float(counts[(last[0], last[1])]) / counts[last[0]])
-		log_prob += math.log(float(counts[last[0]]) / sum(counts.values()))
+	# handle edge case, where probability calc involves fewer than 3 words
+	if len(first) > 1:
+		log_prob += math.log(float(counts[(first[0], first[1])]) / counts[first[0]])
+		log_prob += math.log(float(counts[first[0]]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
 	else:
-		log_prob += math.log(float(counts[last]) / sum(counts.values()))
+		log_prob += math.log(float(counts[last]) / sum([count for key, count in counts.iteritems() if len(key) == 1]))
 		
 	return math.exp(-log_prob / len(test_essay))
 
@@ -83,18 +89,21 @@ def main():
 	"hi my name is kevin",
 	"hi my name is kevin",
 	"hi my name is kevin",
-	"hi my name is kevin"
+	"hi my name is kevin",
 	]
 
-	test_essay = "what are your favorite color"
+	test_essay = "what is your favorite color"
 	test_essay2 = "my name is annie kevin"
 	test_essay3 = "hi my name is kevin"
+	test_essay4 = "blah blah blah blah blah"
+	test_essay5 = "hi"
 
 	counts = create_counts(train_essays)
+
 	print perplexity(counts, test_essay)
 	print perplexity(counts, test_essay2)
 	print perplexity(counts, test_essay3)
-
-	print counts
+	print perplexity(counts, test_essay4)
+	print perplexity(counts, test_essay5)
 
 if __name__ == "__main__": main()

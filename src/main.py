@@ -1,4 +1,4 @@
-import util
+import features.util as util
 
 from features.pos_tags import *
 from features.spelling import *
