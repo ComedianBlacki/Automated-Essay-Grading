@@ -25,7 +25,7 @@ def main():
 	valid_df = util.get_validation_data('../data/valid_set.tsv')
 
 	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')
-
+	'''
 	print "Calculating number of sentences feature..."
 
 	train_df, valid_df = fill_sentence_column(train_df, valid_df)
@@ -65,7 +65,7 @@ def main():
 	print "Calculating perplexity feature..."
 
 	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
-	
+	'''
 	print "Moving scores to right end of dataframe"
 
 	# Should go after all features are filled in
