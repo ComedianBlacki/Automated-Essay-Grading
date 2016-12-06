@@ -5,6 +5,7 @@ from features.spelling import *
 from features.sentences import *
 from features.perplexity import *
 from features.tfidf_3gram import *
+from features.unique_words import *
 
 import pandas as pd
 import numpy as np
@@ -25,6 +26,14 @@ def main():
 	valid_df = util.get_validation_data('../data/valid_set.tsv')
 
 	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')
+    
+    print "Calculating total words feature..."
+    
+    train_df, valid_df = fill_total_words_column(train_df, valid_df)
+    
+    print "Calculating unique words feature..."
+    
+    train_df, valid_df = fill_unique_words_column(train_df, valid_df)
 
 	print "Calculating number of sentences feature..."
 
