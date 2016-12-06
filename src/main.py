@@ -12,6 +12,10 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression as LogReg
 from sklearn.linear_model import LogisticRegressionCV as LogRegCV
+from sklearn.linear_model import LinearRegression as LinReg
+from scipy.stats import spearmanr as Spearman
+from sklearn import linear_model
+import pickle
 
 # NOTE: FEEL FREE TO COMMENT OUT LINES TO SPEED UP YOUR TESTING
 def main():
@@ -26,6 +30,7 @@ def main():
 
 	train_df, valid_df = fill_sentence_column(train_df, valid_df)
 
+	
 	print "Cleaning for spelling..."
 
 	# cleaned up data for spelling feature
@@ -38,7 +43,7 @@ def main():
 
 	# spelling feature
 	train_df, valid_df = fill_spelling_column(train_df, valid_df, train_essays_spelling, valid_essays_spelling)
-
+	'''
 	print "Cleaning for TFIDF..."
 
 	# cleaned up data for tfidf vector feature
@@ -51,7 +56,7 @@ def main():
 
 	# tfidf vector feature with unigram
 	train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays)
-
+	'''
 	print "Calculating pos tags feature..."
 
 	train_df, valid_df = fill_pos_columns(train_df, valid_df)
@@ -60,7 +65,7 @@ def main():
 	print "Calculating perplexity feature..."
 
 	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
-
+	
 	print "Moving scores to right end of dataframe"
 
 	# Should go after all features are filled in
@@ -72,7 +77,10 @@ def main():
 
 	print valid_df.head()
 
-	# implement LinReg model here
+	train_df.to_pickle('train_df.txt')
+	valid_df.to_pickle('valid_df.txt')
 
+	# implement LinReg model here
+	# Use cross-validation to regularize the linear regression model
 
 if __name__ == "__main__": main()

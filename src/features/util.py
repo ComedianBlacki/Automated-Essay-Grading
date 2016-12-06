@@ -24,8 +24,6 @@ def append_standardized_column(train_df, valid_df, non_std_col_name):
 
 	std_data = create_standardization_data(train_df, non_std_col_name)
 
-	print std_data
-
 	dfs = [train_df, valid_df]
 	for df in dfs:
 		for i in xrange(df.shape[0]):
