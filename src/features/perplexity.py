@@ -2,8 +2,10 @@ import math
 import util
 
 def fill_perplexity_columns(train_df, valid_df):
-	train_clean = vectorizer_clean(train_df)
-	valid_clean = vectorizer_clean(valid_df)
+	train_clean = util.vectorizer_clean(train_df)
+	valid_clean = util.vectorizer_clean(valid_df)
+
+	print "Creating ngram counts..."
 
 	counts = create_counts(train_clean['essay'].values)
 
@@ -26,7 +28,8 @@ def fill_perplexity_columns(train_df, valid_df):
 
 	train_df['perplexity'] = train_clean['perplexity']
 	valid_df['perplexity'] = valid_clean['perplexity']
-	return train_df, valid_df
+
+	return util.append_standardized_column(train_df, valid_df, 'perplexity')
 
 # apply LaPlace smoothing, incrementing all counts by 1
 class LaPlaceCounter(dict):

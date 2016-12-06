@@ -18,8 +18,9 @@ def main():
 
 	print "Fetching data..."
 	train_df = util.get_training_data('../data/training_set_rel3.tsv')
-	train_df = util.standardize_training_scores(train_df)
 	valid_df = util.get_validation_data('../data/valid_set.tsv')
+
+	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')
 
 	print "Calculating number of sentences feature..."
 
@@ -55,6 +56,7 @@ def main():
 
 	train_df, valid_df = fill_pos_columns(train_df, valid_df)
 
+	
 	print "Calculating perplexity feature..."
 
 	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)

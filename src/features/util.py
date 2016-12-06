@@ -11,16 +11,29 @@ def move_column_last(df, column_name):
 	df[column_name] = column
 	return df
 
-# Adds standardized scores to training set
-def append_standardized_scores(old_df):
-    new_df = old_df.copy()
-    new_df['std_score'] = new_df.groupby(['essay_set'])[['score']].apply(lambda x: (x - np.mean(x)) / (np.std(x)))
-    return new_df
-
 # returns a column to place data
 def append_zeros_column(df, title):
 	df[title] = pd.Series([0.0] * df.shape[0], index=df.index)
 	return df
+
+# non standardized column must be already included in dfs
+def append_standardized_column(train_df, valid_df, non_std_col_name):
+	std_col_name = "std_" + non_std_col_name
+	train_df = append_zeros_column(train_df, std_col_name)
+	valid_df = append_zeros_column(valid_df, std_col_name)
+
+	std_data = create_standardization_data(train_df, non_std_col_name)
+
+	print std_data
+
+	dfs = [train_df, valid_df]
+	for df in dfs:
+		for i in xrange(df.shape[0]):
+			essay_set = df.get_value(i, 'essay_set')
+			non_std_val = df.get_value(i, non_std_col_name)
+			df = df.set_value(i, std_col_name, (non_std_val - std_data[essay_set - 1][0]) / std_data[essay_set - 1][1])
+
+	return train_df, valid_df
 
 # Calculates the mean and standard deviation for column_name in train_df
 # Can be generalized to different columns
@@ -29,10 +42,10 @@ def create_standardization_data(train_df, column_name):
     max_essay_set = max(train_df['essay_set'])
     #list of the standardized values
     standardization_data = []
-    for i in range(max_essay_set+1):
-        mean = np.mean((train_df[train_df['essay_set'] == i + 1])[column_name])
-        std = np.std((train_df[train_df['essay_set'] == i + 1])[column_name])
-        standardization_data.append([i + 1, mean, std])
+    for i in range(1, max_essay_set+1):
+        mean = np.mean((train_df[train_df['essay_set'] == i])[column_name])
+        std = np.std((train_df[train_df['essay_set'] == i])[column_name])
+        standardization_data.append([mean, std])
     return standardization_data
 
 def get_training_data(filename):
@@ -48,22 +61,6 @@ def get_training_data(filename):
 	train_df = train_df.drop('domain2_score', axis=1)
 	train_df = train_df.rename(columns={'domain1_score': 'score'})
 
-	return train_df
-
-def standardize_training_scores(train_df):
-
-	standardization_data = create_standardization_data(train_df, 'score')
-	train_df = append_standardized_scores(train_df)
-
-	#validate that the standardization works
-	max_essay_set = max(train_df['essay_set'])
-	for i in range (max_essay_set):
-	    valid = train_df[train_df["essay_set"] == i + 1]["std_score"]
-	    assert abs(np.mean(valid) - 0.0) < 0.001
-	    assert abs(np.std(valid) - 1.0) < 0.001
-
-	# assert no missing data
-	assert not train_df.isnull().any().any()
 	return train_df
 
 def get_validation_data(filename):
