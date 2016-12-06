@@ -21,9 +21,13 @@ from nltk.corpus import wordnet
 ##################################################################
 
 # REGULARIZING FOR SENTENCE LENGTHS 
-def append_regularized_sentence_count(old_df):
+def append_regularized_sentence_count(old_df, mean, std):
     new_df = old_df.copy()
-    new_df['sentence_count_std'] = new_df.groupby(['essay_set'])[['sentence_count']].apply(lambda x: (x - np.mean(x)) / (np.std(x)))
+    max_essay_set = max(old_df['essay_set'])
+    # list of the regularized values
+    #regularization_data = []
+    for i in range(max_essay_set):
+        new_df['sentence_count_std'] = new_df.groupby(['essay_set'])[['sentence_count']].apply(lambda x: (x - mean[i]) / std[i])
     return new_df
 
 def create_regularization_sentence_count(old_df):
@@ -55,8 +59,16 @@ def fill_sentence_colum(train_df, valid_df):
     train_df['sentence_count'] = numOfSent_train
     valid_df['sentence_count'] = numOfSent_valid
 
-    train_df = append_regularized_sentence_count(train_df)
-    valid_df = append_regularized_sentence_count(valid_df)
+    #train_df = append_regularized_sentence_count(train_df)
+    #regularized_train = create_regularization_sentence_count(train_df)
+   # train_mean = np.array(regularized_train[1])
+    #train_std = np.array(regularized_train[2])
+    #print regularized_train
+    #print train_mean
+    #print train_std
+    #valid_df = append_regularized_sentence_count(valid_df, train_mean, train_std)
+
+    #valid_df
     '''
     # DENORMALIZING FOR THE VALID SET
     regularization_data_sentence = create_regularization_sentence_count(train_df)
