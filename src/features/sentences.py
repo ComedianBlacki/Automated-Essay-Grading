@@ -45,7 +45,7 @@ def sentences(par):
     split_sent = re.split(r'[.!?]+', par)
     return len(split_sent)
 
-def fill_sentence_colum(train_df, valid_df):
+def fill_sentence_column(train_df, valid_df):
     numOfSent_train = []
     for essay in train_df['essay']:
         sent = sentences(essay)
