@@ -36,7 +36,7 @@ def fill_pos_columns(train_df, valid_df):
 				else:
 					essay_set = "Validation"
 				print essay_set + " essay " + str(i) + " of " + str(df.shape[0])
-			essay = df.get_value(i, 'essay').decode('utf-8',errors='ignore')
+			essay = df.get_value(i, 'essay')
 			tags = create_tags_dict(essay)
 
 			#print tags

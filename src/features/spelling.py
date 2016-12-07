@@ -5,11 +5,8 @@ def proportion_correct_spelling(text):
     text_len = len(text)
     correct = 0
     for word in text:
-        try:
-            if wordnet.synsets(word):
-                correct += 1
-        except:
-            correct+= 0
+    	if wordnet.synsets(word):
+    		correct += 1
     return 1. * correct / text_len
 
 # should be the cleaned up version 

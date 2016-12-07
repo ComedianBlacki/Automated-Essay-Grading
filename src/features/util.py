@@ -50,7 +50,7 @@ def get_training_data(filename):
 	# Read in training data
 	# Note that for essay set 2, score becomes average of 2 domain scores
 	train_cols = ['essay_id', 'essay_set', 'essay', 'domain1_score', 'domain2_score']
-	train_df = pd.read_csv(filename, delimiter='\t', usecols=train_cols)
+	train_df = pd.read_csv(filename, delimiter='\t', usecols=train_cols, encoding='ISO-8859-1')
 	for i in xrange(train_df.shape[0]):
 	    if not np.isnan(train_df.get_value(i, 'domain2_score')):
 	        assert train_df.get_value(i, 'essay_set') == 2
@@ -64,7 +64,7 @@ def get_training_data(filename):
 def get_validation_data(filename):
 	# Read in validation data
 	valid_cols = ['essay_id', 'essay_set', 'essay', 'domain1_predictionid', 'domain2_predictionid']
-	valid_df = pd.read_csv(filename, delimiter='\t', usecols=valid_cols)
+	valid_df = pd.read_csv(filename, delimiter='\t', usecols=valid_cols, encoding='ISO-8859-1')
 	valid_df['score'] = pd.Series([0] * valid_df.shape[0], index=valid_df.index)
 
 	# scores are stored in separate data set, we'll put them in same one
