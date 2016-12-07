@@ -27,8 +27,8 @@ def main():
 	valid_df = util.get_validation_data('../data/valid_set.tsv')
 
 	# Restrict dfs for testing
-	train_df = train_df.sample(n=800).reset_index()
-	valid_df = valid_df.sample(n=800).reset_index()
+	#train_df = train_df.sample(n=800).reset_index()
+	#valid_df = valid_df.sample(n=800).reset_index()
 
 	print train_df.head()
 
