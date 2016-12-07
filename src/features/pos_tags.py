@@ -29,7 +29,7 @@ def fill_pos_columns(train_df, valid_df):
 
 	for j, df in enumerate(dfs):
 		for i in xrange(df.shape[0]):
-			if i % 1000 == 0:
+			if i % 100 == 0:
 				essay_set = None
 				if j == 0:
 					essay_set = "Train"

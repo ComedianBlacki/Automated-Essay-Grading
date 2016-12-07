@@ -21,7 +21,7 @@ class Perplexity:
 		self.num_words = float(sum(self.counts) + len(self.counts))
 
 	def fill_perplexity_columns(self, train_df, valid_df):
-		print "Creating ngram COUNTS..."
+		print "Creating ngram counts..."
 		self.create_counts(util.perplexity_clean(train_df))
 
 		train_clean = util.vectorizer_clean(train_df)
@@ -31,7 +31,7 @@ class Perplexity:
 
 		for j, df in enumerate(dfs):
 			for i in xrange(df.shape[0]):
-				if i % 20 == 0:
+				if i % 100 == 0:
 					essay_set = None
 					if j == 0:
 						essay_set = "Train"
