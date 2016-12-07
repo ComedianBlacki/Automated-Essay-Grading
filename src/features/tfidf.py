@@ -9,33 +9,35 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 MAX_FEATURES = 100000
 
-def column(matrix, i):
-    return [row[i] for row in matrix]
-
-def normalize_tfidf_column(matrix):
-	normed_matrix = normalize(matrix, axis=1, norm='l1')
-	return normed_matrix
-
 def fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, ngrams):
 	vectorizer = TfidfVectorizer(stop_words = 'english', max_features=MAX_FEATURES, ngram_range=(ngrams, ngrams))
+
+	print "Fitting training essays..."
+
 	train_vectors = vectorizer.fit_transform(train_essays).toarray()
+
+	print "Transforming validation essays..."
+
 	valid_vectors = vectorizer.transform(valid_essays).toarray()
 
-	train_vectors_norm = normalize_tfidf_column(train_vectors)
-	valid_vectors_norm = normalize_tfidf_column(valid_vectors)
-			
-	for i in range(len(train_vectors_norm[0])):
-		new_column = column(train_vectors_norm, i)
-		label = str(ngrams)+'-gram_tfidf_' + str(i+1)
-		new_df = pd.DataFrame({label: new_column})
-		train_df = train_df.join(new_df)
+	print "Normalizing train vectors..."
 
-	for i in range(len(valid_vectors_norm[0])):
-		new_column = column(valid_vectors_norm, i)
-		label = str(ngrams)+'-gram_tfidf_' + str(i+1)
-		#print label
-		new_df = pd.DataFrame({label: new_column})
-		valid_df = valid_df.join(new_df)
+	train_vectors = normalize(train_vectors, axis=1, norm='l1')
+
+	print "Normalizing validation vectors..."
+
+	valid_vectors = normalize(valid_vectors, axis=1, norm='l1')
+
+	NUM_COL = len(train_vectors[0])
+
+	col_names = [str(ngrams)+"-gram_tfidf_" + str(i+1) for i in range(NUM_COL)]
+
+	print "Joining train..."
+
+	train_df = train_df.join(pd.DataFrame(train_vectors, index=train_df.index, columns=col_names))
+
+	print "Joining validation..."
+	valid_df = valid_df.join(pd.DataFrame(valid_vectors, index=valid_df.index, columns=col_names))
 
 	return train_df, valid_df
 

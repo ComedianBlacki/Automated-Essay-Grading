@@ -55,6 +55,15 @@ def main():
 	# spelling feature
 	train_df, valid_df = fill_spelling_column(train_df, valid_df, train_essays_spelling, valid_essays_spelling)
 	
+	print "Calculating pos tags feature..."
+
+	train_df, valid_df = fill_pos_columns(train_df, valid_df)
+
+	
+	print "Calculating perplexity feature..."
+
+	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
+
 	print "Cleaning for TFIDF..."
 	# cleaned up data for tfidf vector feature
 	vectorizer_train = util.vectorizer_clean(train_df)
@@ -75,15 +84,6 @@ def main():
 
 	# tfidf vector feature with unigram
 	#train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 3)
-	
-	print "Calculating pos tags feature..."
-
-	train_df, valid_df = fill_pos_columns(train_df, valid_df)
-
-	
-	print "Calculating perplexity feature..."
-
-	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
     
 	print "Moving scores to right end of dataframe"
 
