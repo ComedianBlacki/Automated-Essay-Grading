@@ -129,37 +129,40 @@ def main():
 
 		print "Linear for Essay Set "+str(i)+":", Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores)
 
-		alpha = [x*1.0/20 for x in range(20, 0, -1)]
+		alphas = [x*1.0/20 for x in range(20, 0, -1)]
 		ridge_scores = []
 		lasso_scores = []
-		for a in alpha:
+		for a in alphas:
 			ridge = linear_model.Ridge(alpha = a)
 			ridge.fit(train_x, train_std_scores)
 			valid_pred_std_scores_ridge = ridge.predict(valid_x)
 
 			new_ridge_score = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores_ridge)[0]
-			ridge_scores.append(new_ridge_score)
+			if new_ridge_score != float('nan'):
+				ridge_scores.append(new_ridge_score)
 
-			print "Alpha = " + str(alpha) + " Ridge for Essay Set "+str(i)+":", new_ridge_score
+			print "Alpha = " + str(a) + " Ridge for Essay Set "+str(i)+":", new_ridge_score
 
 			lasso = linear_model.Lasso(alpha = a)
 			lasso.fit(train_x, train_std_scores)
 			valid_pred_std_scores_lasso = lasso.predict(valid_x)
 
 			new_lasso_score = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores_lasso)[0]
-			lasso_scores.append(new_lasso_score)
+			if new_lasso_score != float('nan'):
+				lasso_scores.append(new_lasso_score)
 
-			print "Alpha = " + str(alpha) + "Lasso for Essay Set "+str(i)+":", new_lasso_score
+			print "Alpha = " + str(a) + "Lasso for Essay Set "+str(i)+":", new_lasso_score
+
 
 		print ""
 
 		best_score_ridge = np.max(ridge_scores)
-		best_alpha_ridge = alpha[np.argmax(ridge_scores)]
+		best_alpha_ridge = alphas[np.argmax(ridge_scores)]
 		print "Linear (RIDGE alpha=" + str(best_alpha_ridge) +") for Essay Set "+str(i)+":", str(best_score_ridge)
 		print ""
 
 		best_score_lasso = np.max(lasso_scores)
-		best_alpha_lasso = alpha[np.argmax(lasso_scores)]
+		best_alpha_lasso = alphas[np.argmax(lasso_scores)]
 		print "Linear (LASSO alpha =" + str(best_alpha_lasso) + ") for Essay Set "+str(i)+":", str(best_score_lasso)
 		print ""
 
