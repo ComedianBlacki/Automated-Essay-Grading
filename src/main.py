@@ -68,16 +68,15 @@ def main():
 
 	# tfidf vector feature with unigram
 	train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 1)
-	print "Calculating TFIDF features with bigram..."
+	#print "Calculating TFIDF features with bigram..."
 
 	# tfidf vector feature with unigram
-	train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 2)
+	#train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 2)
 
-	print "Calculating TFIDF features with trigram..."
+	#print "Calculating TFIDF features with trigram..."
 
 	# tfidf vector feature with unigram
-	train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 3)
-
+	#train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 3)
 	
 	print "Calculating pos tags feature..."
 

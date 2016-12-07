@@ -7,6 +7,8 @@ from sklearn.preprocessing import normalize
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+MAX_FEATURES = 100000
+
 def column(matrix, i):
     return [row[i] for row in matrix]
 
@@ -15,7 +17,7 @@ def normalize_tfidf_column(matrix):
 	return normed_matrix
 
 def fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, ngrams):
-	vectorizer = TfidfVectorizer(stop_words = 'english', max_features=10, ngram_range=(ngrams, ngrams))
+	vectorizer = TfidfVectorizer(stop_words = 'english', max_features=MAX_FEATURES, ngram_range=(ngrams, ngrams))
 	train_vectors = vectorizer.fit_transform(train_essays).toarray()
 	valid_vectors = vectorizer.fit_transform(valid_essays).toarray()
 
