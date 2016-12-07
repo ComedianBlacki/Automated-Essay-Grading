@@ -3,7 +3,7 @@ import features.util as util
 from features.pos_tags import *
 from features.spelling import *
 from features.sentences import *
-from features.perplexity import *
+from features.perplexity import Perplexity
 from features.tfidf import *
 from features.unique_words import *
 from features.total_words import *
@@ -25,6 +25,10 @@ def main():
 	print "Fetching data..."
 	train_df = util.get_training_data('../data/training_set_rel3.tsv')
 	valid_df = util.get_validation_data('../data/valid_set.tsv')
+	
+	print "Calculating perplexity feature..."
+
+	train_df, valid_df = Perplexity().fill_perplexity_columns(train_df, valid_df)
 
 	# Restrict dfs for testing
 	#train_df = train_df.sample(n=800).reset_index()
@@ -58,11 +62,6 @@ def main():
 	print "Calculating pos tags feature..."
 
 	train_df, valid_df = fill_pos_columns(train_df, valid_df)
-
-	
-	print "Calculating perplexity feature..."
-
-	train_df, valid_df = fill_perplexity_columns(train_df, valid_df)
 
 	print "Cleaning for TFIDF..."
 	# cleaned up data for tfidf vector feature

@@ -100,6 +100,15 @@ def vectorizer_clean(old_df):
         new_df.set_value(i, 'essay', " ".join(re.sub('[^a-zA-Z\d\s]', '', new_df['essay'].iloc[i]).lower().split())) 
     return new_df
 
+# return essay set as one string in a list
+# cleaning returns essay with only lowercase words separated by space
+def perplexity_clean(df):
+    essays_string = ""
+    for i in xrange(df.shape[0]):
+    	essay = df.get_value(i, 'essay') 
+    	essays_string += (" ".join(re.sub('[^a-zA-Z\d\s]', '', essay).lower().split()))
+    return [essays_string]
+
 # clean vectorizer for spelling feature
 def vectorizer_clean_spelling(old_df):
     new_df = old_df.copy()
