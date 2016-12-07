@@ -56,7 +56,7 @@ class Perplexity:
 		log_prob = 0.0
 		word_list = test_essay.split()
 		for word in word_list:
-			if word in self.vectorizer.vocabulary_.keys():
+			if word in self.vectorizer.vocabulary_:
 				log_prob += math.log( (self.counts[self.vectorizer.vocabulary_[word]] + 1.0) / self.num_words)
 			else:
 				log_prob += math.log (1.0 / self.num_words)
