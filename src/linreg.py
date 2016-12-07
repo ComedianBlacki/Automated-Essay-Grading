@@ -28,9 +28,9 @@ max_essay_set = max(train_df['essay_set'])
 #COLS = ['std_sentence_count', 'spelling_correct', 'std_unique_words', 'std_total_words', 'essay_set', 'std_total_words', 'std_unique_words'
 #		'ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X', 'std_perplexity', 'std_score']
 
-COLS = ['std_sentence_count', 'essay_set', 'std_score']
-train_df = train_df[COLS].join(train_df.filter(regex=("tfidf_*")))
-valid_df = valid_df[COLS].join(valid_df.filter(regex=("tfidf_*")))
+#COLS = ['std_sentence_count', 'essay_set', 'std_score']
+#train_df = train_df[COLS].join(train_df.filter(regex=("tfidf_*")))
+#valid_df = valid_df[COLS].join(valid_df.filter(regex=("tfidf_*")))
 
 for i in range(1, max_essay_set+1):
 
