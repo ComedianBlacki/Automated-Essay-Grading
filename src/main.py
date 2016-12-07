@@ -30,8 +30,6 @@ def main():
 	#train_df = train_df.sample(n=800).reset_index()
 	#valid_df = valid_df.sample(n=800).reset_index()
 
-	print train_df.head()
-
 	train_df, valid_df = util.append_standardized_column(train_df, valid_df, 'score')	
 
 	print "Calculating number of sentences feature..."

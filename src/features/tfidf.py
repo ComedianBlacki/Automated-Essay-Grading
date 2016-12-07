@@ -19,7 +19,7 @@ def normalize_tfidf_column(matrix):
 def fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, ngrams):
 	vectorizer = TfidfVectorizer(stop_words = 'english', max_features=MAX_FEATURES, ngram_range=(ngrams, ngrams))
 	train_vectors = vectorizer.fit_transform(train_essays).toarray()
-	valid_vectors = vectorizer.fit_transform(valid_essays).toarray()
+	valid_vectors = vectorizer.transform(valid_essays).toarray()
 
 	train_vectors_norm = normalize_tfidf_column(train_vectors)
 	valid_vectors_norm = normalize_tfidf_column(valid_vectors)
