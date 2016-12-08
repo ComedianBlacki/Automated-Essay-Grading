@@ -68,25 +68,10 @@ def main():
 	valid_essays = vectorizer_valid['essay'].values
 
 	print "Calculating TFIDF features with unigram..."
-
-	# tfidf vector feature with unigram
 	train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 1)
-	#print "Calculating TFIDF features with bigram..."
-
-	# tfidf vector feature with unigram
-	#train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 2)
 
 	#print "Calculating TFIDF features with trigram..."
-
-	# tfidf vector feature with unigram
 	#train_df, valid_df = fill_tfidf_column(train_df, valid_df, train_essays, valid_essays, 3)
-    
-	#print "Moving scores to right end of dataframe"
-
-	# Should go after all features are filled in
-	#train_df = util.move_column_last(train_df, 'score')
-	#train_df = util.move_column_last(train_df, 'std_score')
-	#valid_df = util.move_column_last(valid_df, 'score')
 
 	print train_df.head()
 
@@ -101,18 +86,14 @@ def main():
 	print train_df.shape
 	print valid_df.shape
 
-	"""
-	train_df.to_hdf('train.h5','df')
-	valid_df.to_hdf('valid.h5','df')
-
-	train_df = None
-	valid_df = None
-
-	train_df = pd.read_hdf('train.h5', 'df')
-	valid_df = pd.read_hdf('valid.h5', 'df')
-	"""
-
 	max_essay_set = max(train_df['essay_set'])
+
+	linreg_scores_df = pd.DataFrame(columns=['essay_set', 'p', 'spearman'])
+
+	lasso_scores_df = pd.DataFrame(columns=['essay_set', 'alpha', 'p', 'spearman'])
+	ridge_scores_df = pd.DataFrame(columns=['essay_set', 'alpha', 'p', 'spearman'])
+
+	alphas = [x*1.0/20 for x in range(20, 0, -1)]
 
 	for i in range(1, max_essay_set+1):
 
@@ -127,43 +108,38 @@ def main():
 		valid_x = np.asarray((valid_df[valid_df['essay_set'] == i]).drop(['essay_set', 'std_score'], axis=1))
 		valid_pred_std_scores = regr.predict(valid_x)
 
-		print "Linear for Essay Set "+str(i)+":", Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores)
+		linreg_spear, p = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores)
+		linreg_scores_df = linreg_scores_df.append({'essay_set': i, 'p': p, 'spearman': linreg_spear}, ignore_index=True)
 
-		alphas = [x*1.0/20 for x in range(20, 0, -1)]
-		ridge_scores = []
-		lasso_scores = []
+		print "Linear for Essay Set "+str(i)+":", linreg_spear
+
 		for a in alphas:
 			ridge = linear_model.Ridge(alpha = a)
 			ridge.fit(train_x, train_std_scores)
 			valid_pred_std_scores_ridge = ridge.predict(valid_x)
 
-			new_ridge_score = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores_ridge)[0]
-			if new_ridge_score != float('nan'):
-				ridge_scores.append(new_ridge_score)
+			ridge_spear, p = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores_ridge)
+			ridge_scores_df = ridge_scores_df.append({'essay_set': i, 'alpha': a, 'p': p, 'spearman': ridge_spear}, ignore_index=True)
 
-			print "Alpha = " + str(a) + " Ridge for Essay Set "+str(i)+":", new_ridge_score
+			print "Alpha = " + str(a) + " Ridge for Essay Set "+str(i)+":", ridge_spear
 
 			lasso = linear_model.Lasso(alpha = a)
 			lasso.fit(train_x, train_std_scores)
 			valid_pred_std_scores_lasso = lasso.predict(valid_x)
 
-			new_lasso_score = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores_lasso)[0]
-			if new_lasso_score != float('nan'):
-				lasso_scores.append(new_lasso_score)
+			lasso_spear, p = Spearman(a = (valid_df[valid_df['essay_set'] == i])["std_score"], b = valid_pred_std_scores_lasso)
+			lasso_scores_df = lasso_scores_df.append({'essay_set': i, 'alpha': a, 'p': p, 'spearman': lasso_spear}, ignore_index=True)
 
-			print "Alpha = " + str(a) + "Lasso for Essay Set "+str(i)+":", new_lasso_score
+			print "Alpha = " + str(a) + "Lasso for Essay Set "+str(i)+":", lasso_spear
 
 
-		print ""
+	print linreg_scores_df
+	print ridge_scores_df
+	print lasso_scores_df
 
-		best_score_ridge = np.max(ridge_scores)
-		best_alpha_ridge = alphas[np.argmax(ridge_scores)]
-		print "Linear (RIDGE alpha=" + str(best_alpha_ridge) +") for Essay Set "+str(i)+":", str(best_score_ridge)
-		print ""
+	linreg_scores_df.to_pickle('linreg_scores-01.pickle')
+	ridge_scores_df.to_pickle('ridge_scores-01.pickle')
+	lasso_scores_df.to_pickle('lasso_scores-01.pickle')
 
-		best_score_lasso = np.max(lasso_scores)
-		best_alpha_lasso = alphas[np.argmax(lasso_scores)]
-		print "Linear (LASSO alpha =" + str(best_alpha_lasso) + ") for Essay Set "+str(i)+":", str(best_score_lasso)
-		print ""
 
 if __name__ == "__main__": main()
