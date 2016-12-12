@@ -86,6 +86,7 @@ def main():
 	print train_df.shape
 	print valid_df.shape
 
+
 	max_essay_set = max(train_df['essay_set'])
 
 	linreg_scores_df = pd.DataFrame(columns=['essay_set', 'p', 'spearman'])
