@@ -1,6 +1,6 @@
-Automated Essay Grading
-Final Project for CS109a: Introduction to Data Science
-By Anmol Gupta, Annie Hwang, Paul Lisker, and Kevin Loughlin
+# Automated Essay Grading
+## Final Project for CS109a: Introduction to Data Science
+## By Anmol Gupta, Annie Hwang, Paul Lisker, and Kevin Loughlin
 
 See https://www.kaggle.com/c/asap-aes for info on data sets.  Particularly note the anonymization techniques, which might make parsing a little more difficult.
 
