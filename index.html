@@ -8,6 +8,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="icon" type="image/png" href="img/favicon.png"/>
   </head>
   <body>
     <section class="page-header">
@@ -117,8 +118,7 @@
 <p>We experimented with both Lasso and Ridge regularization, tuning for optimal alpha with values ranging from 0.05 to 1 in 0.05 increments. As learned in class, Lasso performs both parameter shrinkage and variable selection, automatically removing predictors that are collinear with other predictors. Ridge regression, on the other hand, does not zero out coefficients for the predictors, but does minimize them, limiting their effect on the Spearman correlation.</p>
 
 <figure>
-      <img src="img/lasso.png" alt="Figure 4: Lasso">
-      <img src="img/ridge.png" alt="Figure 4: Ridge">
+      <img src="img/lasso-ridge.png" alt="Figure 4: Lasso and Ridge Regularization">
         <figcaption>Figure 4: Linear Regression with Lasso and Ridge Regularization. Alpha values against Spearman Rank Correlation score for each essay set.
 </figcaption>
 </figure>
