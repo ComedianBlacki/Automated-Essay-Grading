@@ -41,7 +41,19 @@
 
 <p>With regard to vocabulary sizes, we reasoned that individuals who typically read and write more have broader lexicons, and as such a larger vocabulary size would correlate with a higher quality essay, and thus a higher score. After all, the more individuals read and write, the greater their exposure to a larger vocabulary and a more thorough understanding of how properly use it in their own writing. As such, a skilled writer will likely use a variety of exciting words in an effort to more effectively keep readers engaged and to best express their ideas in response to the prompt. Therefore, we hypothesized that a larger vocabulary list would correlate with a higher essay score.</p>
 
-<p>INSERT FIGURE 1 WITH CAPTION.</p>
+<figure>
+      <img src="img/set1.png" alt="Figure 1: Essay set 1 stats">
+</figure>
+<figure>
+      <img src="img/set3.png" alt="Figure 1: Essay set 3 stats">
+</figure>
+<figure>
+      <img src="img/set4.png" alt="Figure 1: Essay set 4 stats">
+</figure>
+<figure>
+      <img src="img/set8.png" alt="Figure 1: Essay set 8 stats">
+        <figcaption>Figure 1: Word Count vs. Score and Vocab Size vs. Score for essay sets 1, 3, 4, and 8</figcaption>
+</figure>
 
 <p>The first notable finding, as evidenced in Figure 1, is that the Word Count vs. Score scatter plots closely mirror the Vocab Size vs Score scatter plots when paired by essay set. This suggests that there might be a relationship between the length of the essay and the different number of words that a writer uses, a discovery that makes sense: a longer essay is bound to have more unique words. Given the correlation between total number of words and number of unique words, it can make sense to talk about the trends of both graphs per each essay set at once.</p>
 
@@ -104,7 +116,12 @@
 
 <p>We experimented with both Lasso and Ridge regularization, tuning for optimal alpha with values ranging from 0.05 to 1 in 0.05 increments. As learned in class, Lasso performs both parameter shrinkage and variable selection, automatically removing predictors that are collinear with other predictors. Ridge regression, on the other hand, does not zero out coefficients for the predictors, but does minimize them, limiting their effect on the Spearman correlation.</p>
 
-<p>INSERT FIGURE 4 WITH CAPTION</p>
+<figure>
+      <img src="img/lasso.png" alt="Figure 4: Lasso">
+      <img src="img/ridge.png" alt="Figure 4: Ridge">
+        <figcaption>Figure 4: Linear Regression with Lasso and Ridge Regularization. Alpha values against Spearman Rank Correlation score for each essay set.
+</figcaption>
+</figure>
 
 <p>INSERT FIGURE 5 WITH CAPTION</p>
 
