@@ -53,18 +53,16 @@ train_df, valid_df = fill_unique_words_column(train_df, valid_df, train_essays_s
 print "Calculating spelling feature..."
 train_df, valid_df = fill_spelling_column(train_df, valid_df, train_essays_spelling, valid_essays_spelling)
 
+print "Calculating pos tags features..."
+
+train_df, valid_df = fill_pos_columns(train_df, valid_df)
 
 # plot essay set number 1 word count versus score
-features = ['std_perplexity', 'spelling_correct', 'std_sentence_count', 'std_total_words', 'std_unique_words']
+features = ['std_perplexity', 'spelling_correct', 'std_sentence_count', 'std_total_words', 'std_unique_words', 'NOUN']
 titles = ['Perplexity vs Score', 'Correct Spelling vs Score', 'Sentence Count vs Score', 'Total Words vs Score', \
-        'Unique Words vs Score']
-#features = ['std_perplexity', 'std_sentence_count']
-#titles = ['Perplexity vs Score', 'Sentenc Ccount vs Score'] 
+        'Unique Words vs Score', 'POS(Noun) vs Score']
 
-#features = ['spelling_correct', 'std_total_words', 'std_unique_words']
-#titles = ['Spelling vs Score', 'Total Words vs Score', 'Unique Words vs Score'] 
-
-axes = [ax1, ax2, ax3, ax4, ax5]
+axes = [ax1, ax2, ax3, ax4, ax5, ax6]
 #axes = [ax1, ax2, ax3]
 for feature, title, ax in zip(features, titles, axes):
     ax.set_title(title)
