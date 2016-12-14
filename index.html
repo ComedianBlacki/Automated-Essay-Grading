@@ -53,7 +53,7 @@
 </figure>
 <figure>
       <img src="img/set8.png" alt="Figure 1: Essay set 8 stats">
-        <figcaption>Figure 1: Word Count vs. Score and Vocab Size vs. Score for essay sets 1, 3, 4, and 8</figcaption>
+        <figcaption><b>Figure 1.</b> Word Count vs. Score and Vocab Size vs. Score for essay sets 1, 3, 4, and 8</figcaption>
 </figure>
 
 <p>The first notable finding, as evidenced in Figure 1, is that the Word Count vs. Score scatter plots closely mirror the Vocab Size vs Score scatter plots when paired by essay set. This suggests that there might be a relationship between the length of the essay and the different number of words that a writer uses, a discovery that makes sense: a longer essay is bound to have more unique words. Given the correlation between total number of words and number of unique words, it can make sense to talk about the trends of both graphs per each essay set at once.</p>
@@ -89,8 +89,56 @@
 <li>.80-1.0 “very strong”[3]</li>
 </ul>
 
-<p>INSERT FIGURE 2 WITH CAPTION</p>
-
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#bbb;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#bbb;color:#594F4F;background-color:#E0FFEB;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#bbb;color:#493F3F;background-color:#9DE0AD;}
+.tg .tg-e3zv{font-weight:bold}
+.tg .tg-9hbo{font-weight:bold;vertical-align:top}
+.tg .tg-yw4l{vertical-align:top}
+</style>
+<!-- <figure> -->
+<table class="tg">
+  <tr>
+    <th class="tg-031e"></th>
+    <th class="tg-e3zv">Set 1</th>
+    <th class="tg-e3zv">Set 2</th>
+    <th class="tg-e3zv">Set 3</th>
+    <th class="tg-e3zv">Set 4</th>
+    <th class="tg-e3zv">Set 5</th>
+    <th class="tg-9hbo">Set 6</th>
+    <th class="tg-9hbo">Set 7</th>
+    <th class="tg-9hbo">Set 8</th>
+    <th class="tg-9hbo">Average</th>
+  </tr>
+  <tr>
+    <td class="tg-e3zv">Spearman</td>
+    <td class="tg-031e">0.483218</td>
+    <td class="tg-031e">0.374053</td>
+    <td class="tg-031e">0.314986</td>
+    <td class="tg-031e">0.316278</td>
+    <td class="tg-031e">0.405456</td>
+    <td class="tg-yw4l">0.151559</td>
+    <td class="tg-yw4l">0.402221</td>
+    <td class="tg-yw4l">0.394887</td>
+    <td class="tg-yw4l">0.355332</td>
+  </tr>
+  <tr>
+    <td class="tg-e3zv">p-Value</td>
+    <td class="tg-031e">8.613e-36</td>
+    <td class="tg-031e">2.311e-21</td>
+    <td class="tg-031e">1.506e-14</td>
+    <td class="tg-031e">4.429e-15</td>
+    <td class="tg-031e">3.473e-25</td>
+    <td class="tg-yw4l">0.000194</td>
+    <td class="tg-yw4l">1.405e-18</td>
+    <td class="tg-yw4l">4.073e-10</td>
+    <td class="tg-yw4l">2.43E-05</td>
+  </tr>
+</table>
+<figure>
+  <figcaption><b>Figure 2.</b> A table with the Spearman scores and p values for the baseline model on each essay set</figcaption>
+</figure>
 <p>As seen in Figure 2, the baseline model received scores that ranged from weak to moderate, all with p-scores of several factors less than 0.05 (i.e. statistically significant results). However, despite the statistic significance of the results, the Spearman correlation—ranging from “very weak” in essay set 6 to “moderate” in essay set 1—is ultimately still too low for automatic grading to be a trustworthy system. As such, we clearly need a stronger model with a more robust selection of features, as expected!</p>
 
 <h3>
@@ -108,7 +156,7 @@
 
 <figure>
       <img src="img/featureVsScore.png" alt="Figure 3: features vs. score">
-        <figcaption>Figure 3: New Features Plotted Against Standardized Scores</figcaption>
+        <figcaption><b>Figure 3.</b> New Features Plotted Against Standardized Scores</figcaption>
 </figure>
 
 <p>Unique word count, word count, and sentence count all seem to have a clearly correlated relationship with score, while perplexity demonstrates a possible trend.  It is our belief that with a more advanced perplexity library, perhaps one based on n-grams rather than unigrams, this relationship would be strengthened.  Indeed, this is a point of discussion later in this report.</p>
@@ -119,11 +167,99 @@
 
 <figure>
       <img src="img/lasso-ridge.png" alt="Figure 4: Lasso and Ridge Regularization">
-        <figcaption>Figure 4: Linear Regression with Lasso and Ridge Regularization. Alpha values against Spearman Rank Correlation score for each essay set.
-</figcaption>
+        <figcaption><b>Figure 4.</b> Linear Regression with Lasso and Ridge Regularization. Alpha values against Spearman Rank Correlation score for each essay set.
+        </figcaption>
 </figure>
 
-<p>INSERT FIGURE 5 WITH CAPTION</p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#bbb;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#bbb;color:#594F4F;background-color:#E0FFEB;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#bbb;color:#493F3F;background-color:#9DE0AD;}
+.tg .tg-diun{font-weight:bold;background-color:#e0ffeb;vertical-align:top}
+.tg .tg-xr28{background-color:#e0ffeb;vertical-align:top}
+.tg .tg-yw4l{vertical-align:top}
+.tg .tg-amwm{font-weight:bold;text-align:center;vertical-align:top}
+.tg .tg-9hbo{font-weight:bold;vertical-align:top}
+.tg .tg-gr78{background-color:#ffce93;vertical-align:top}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-yw4l"></th>
+    <th class="tg-amwm">Set 1</th>
+    <th class="tg-amwm">Set 2</th>
+    <th class="tg-amwm">Set 3</th>
+    <th class="tg-amwm">Set 4</th>
+    <th class="tg-amwm">Set 5</th>
+    <th class="tg-amwm">Set 6</th>
+    <th class="tg-amwm">Set 7</th>
+    <th class="tg-amwm">Set 8</th>
+    <th class="tg-amwm">Average</th>
+  </tr>
+  <tr>
+    <td class="tg-9hbo">Best Alpha</td>
+    <td class="tg-yw4l">0.3</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">1</td>
+    <td class="tg-yw4l">0.15</td>
+    <td class="tg-yw4l"></td>
+  </tr>
+  <tr>
+    <td class="tg-9hbo">Max Ridge</td>
+    <td class="tg-gr78">0.884028</td>
+    <td class="tg-yw4l">0.720432</td>
+    <td class="tg-gr78">0.807483</td>
+    <td class="tg-yw4l">0.813519</td>
+    <td class="tg-yw4l">0.887043</td>
+    <td class="tg-yw4l">0.717841</td>
+    <td class="tg-yw4l">0.797747</td>
+    <td class="tg-yw4l">0.612373</td>
+    <td class="tg-yw4l">0.780058</td>
+  </tr>
+  <tr>
+    <td class="tg-diun">Best Alpha</td>
+    <td class="tg-xr28">0.05</td>
+    <td class="tg-xr28">0.1</td>
+    <td class="tg-xr28">0.1</td>
+    <td class="tg-xr28">0.15</td>
+    <td class="tg-xr28">0.5</td>
+    <td class="tg-xr28">0.5</td>
+    <td class="tg-xr28">0.15</td>
+    <td class="tg-xr28">0.05</td>
+    <td class="tg-xr28"></td>
+  </tr>
+  <tr>
+    <td class="tg-diun">Max Lasso</td>
+    <td class="tg-xr28">0.870108</td>
+    <td class="tg-gr78">0.738401</td>
+    <td class="tg-xr28">0.805037</td>
+    <td class="tg-gr78">0.838745</td>
+    <td class="tg-gr78">0.891339</td>
+    <td class="tg-gr78">0.739961</td>
+    <td class="tg-gr78">0.84513</td>
+    <td class="tg-gr78">0.619065</td>
+    <td class="tg-gr78">0.793473</td>
+  </tr>
+  <tr>
+    <td class="tg-9hbo">Linear</td>
+    <td class="tg-yw4l">0.780988</td>
+    <td class="tg-yw4l">0.572063</td>
+    <td class="tg-yw4l">0.01791</td>
+    <td class="tg-yw4l">0.590328</td>
+    <td class="tg-yw4l">0.719688</td>
+    <td class="tg-yw4l">0.460429</td>
+    <td class="tg-yw4l">0.611579</td>
+    <td class="tg-yw4l">0.509009</td>
+    <td class="tg-yw4l">0.532749</td>
+  </tr>
+</table>
+<figure>
+  <figcaption><b>Figure 5.</b> A table with the tuned alphas that maximized Spearman Rank Correlation for each essay set, as well as the corresponding Spearman Rank Correlation, and the Spearman scores for simple linear regression. The best Spearman score among the three models is highlighted in red for each essay set.
+  </figcaption>
+</figure>
 
 <h3>
 <a id="analysis--interpretation" class="anchor" href="#analysis--interpretation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Analysis &amp; Interpretation</h3>
